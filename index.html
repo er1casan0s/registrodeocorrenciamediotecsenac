@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Registro - SENAC RN</title>
+    <style>
+        /* Estilos baseados nas cores do SENAC RN */
+        :root {
+            --laranja: #FF6B00;
+            --azul-marinho: #003366;
+            --branco: #FFFFFF;
+            --cinza-claro: #F5F5F5;
+            --verde: #28a745;
+            --amarelo: #ffc107;
+            --vermelho: #dc3545;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--cinza-claro);
+            color: var(--azul-marinho);
+            line-height: 1.6;
+        }
+        
+        /* Cabeçalho */
+        header {
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+        
+        /* Navegação */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: var(--branco);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover, 
+        nav ul li a.active {
+            background-color: var(--laranja);
+        }
+        
+        /* Seções */
+        section {
+            display: none;
+            background-color: var(--branco);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--azul-marinho);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--laranja);
+        }
+        
+        h3 {
+            color: var(--azul-marinho);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Estilo para campos inválidos */
+        input:invalid {
+            border-color: var(--vermelho);
+            box-shadow: 0 0 5px rgba(220, 53, 69, 0.3);
+        }
+        
+        input:valid {
+            border-color: var(--verde);
+        }
+        
+        .input-hint {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+            display: block;
+        }
+        
+        .input-error {
+            font-size: 0.85rem;
+            color: var(--vermelho);
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        button {
+            background-color: var(--laranja);
+            color: var(--branco);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e05e00;
+        }
+        
+        .btn-secondary {
+            background-color: var(--azul-marinho);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #002244;
+        }
+        
+        .btn-danger {
+            background-color: var(--vermelho);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        
+        .btn-success {
+            background-color: var(--verde);
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--cinza-claro);
+        }
+        
+        /* Mensagens de confirmação */
+        .message {
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Abas de turno */
+        .turno-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .turno-tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 0.5rem;
+        }
+        
+        .turno-tab.active {
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            border-color: var(--azul-marinho);
+        }
+        
+        .turno-content {
+            display: none;
+        }
+        
+        .turno-content.active {
+            display: block;
+        }
+        
+        /* Grid de turmas */
+        .turmas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .turma-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background-color: var(--branco);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .turma-card h4 {
+            color: var(--azul-marinho);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        /* Modal de edição */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: var(--branco);
+            padding: 2rem;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: var(--azul-marinho);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--azul-marinho);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Indicadores de status */
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-atraso {
+            background-color: var(--amarelo);
+        }
+        
+        .status-celular {
+            background-color: var(--vermelho);
+        }
+        
+        .status-comportamento {
+            background-color: var(--azul-marinho);
+        }
+        
+        /* Rodapé */
+        footer {
+            background-color: var(--azul-marinho);
+            color: var(--branco);
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 2rem;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem;
+            }
+            
+            .turmas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho com navegação -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Sistema de Registro - SENAC RN</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-target="cadastro">Cadastrar Aluno</a></li>
+                        <li><a href="#" class="nav-link" data-target="atrasos">Registrar Atrasos</a></li>
+                        <li><a href="#" class="nav-link" data-target="celular">Uso de Celular</a></li>
+                        <li><a href="#" class="nav-link" data-target="comportamento">Comportamento</a></li>
+                        <li><a href="#" class="nav-link" data-target="alunos">Alunos Cadastrados</a></li>
+                        <li><a href="#" class="nav-link" data-target="relatorios">Relatórios</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Mensagens de confirmação -->
+        <div id="message" class="message"></div>
+
+        <!-- Seção de Cadastro de Aluno -->
+        <section id="cadastro" class="active">
+            <h2>Cadastrar Novo Aluno</h2>
+            <form id="form-cadastro">
+                <div class="form-group">
+                    <label for="nome-aluno">Nome do Aluno:</label>
+                    <input type="text" id="nome-aluno" required>
+                </div>
+                <div class="form-group">
+                    <label for="turno">Turno:</label>
+                    <select id="turno" required>
+                        <option value="">Selecione o turno</option>
+                        <option value="matutino">Matutino</option>
+                        <option value="vespertino">Vespertino</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="turma">Turma:</label>
+                    <select id="turma" required>
+                        <option value="">Primeiro selecione o turno</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="contato-responsavel">Contato do Responsável:</label>
+                    <input type="text" id="contato-responsavel" 
+                           pattern="[0-9()+-\s]*" 
+                           title="Digite apenas números, parênteses, hífens, espaços ou o símbolo de adição"
+                           maxlength="20"
+                           required>
+                    <span class="input-hint">Apenas números, parênteses, hífens, espaços ou o símbolo de adição são permitidos</span>
+                    <span class="input-error" id="contato-error">Por favor, digite um contato válido (apenas números e caracteres especiais comuns em telefones)</span>
+                </div>
+                <button type="submit">Cadastrar Aluno</button>
+            </form>
+        </section>
+
+        <!-- Seção de Registro de Atrasos -->
+        <section id="atrasos">
+            <h2>Registrar Atrasos</h2>
+            <form id="form-atrasos">
+                <div class="form-group">
+                    <label for="aluno-atraso">Aluno:</label>
+                    <input type="text" id="aluno-atraso" list="alunos-atraso" required>
+                    <datalist id="alunos-atraso">
+                        <!-- Opções serão preenchidas via JavaScript -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="hora-atraso">Hora do Atraso:</label>
+                    <input type="time" id="hora-atraso" required>
+                </div>
+                <div class="form-group">
+                    <label for="data-atraso">Data do Atraso:</label>
+                    <input type="date" id="data-atraso" required>
+                </div>
+                <button type="submit">Registrar Atraso</button>
+            </form>
+        </section>
+
+        <!-- Seção de Registro de Uso de Celular -->
+        <section id="celular">
+            <h2>Registrar Uso de Celular</h2>
+            <form id="form-celular">
+                <div class="form-group">
+                    <label for="aluno-celular">Aluno:</label>
+                    <input type="text" id="aluno-celular" list="alunos-celular" required>
+                    <datalist id="alunos-celular">
+                        <!-- Opções serão preenchidas via JavaScript -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="aula-celular">Aula em que ocorreu:</label>
+                    <input type="text" id="aula-celular" required>
+                </div>
+                <div class="form-group">
+                    <label for="observacao-celular">Observação:</label>
+                    <textarea id="observacao-celular"></textarea>
+                </div>
+                <button type="submit">Registrar Uso de Celular</button>
+            </form>
+        </section>
+
+        <!-- Seção de Registro de Comportamento -->
+        <section id="comportamento">
+            <h2>Registrar Observação de Comportamento</h2>
+            <form id="form-comportamento">
+                <div class="form-group">
+                    <label for="aluno-comportamento">Aluno:</label>
+                    <input type="text" id="aluno-comportamento" list="alunos-comportamento" required>
+                    <datalist id="alunos-comportamento">
+                        <!-- Opções serão preenchidas via JavaScript -->
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="observacao-comportamento">Observação:</label>
+                    <textarea id="observacao-comportamento" required></textarea>
+                </div>
+                <button type="submit">Registrar Observação</button>
+            </form>
+        </section>
+
+        <!-- Seção de Alunos Cadastrados -->
+        <section id="alunos">
+            <h2>Alunos Cadastrados</h2>
+            
+            <!-- Abas de turno -->
+            <div class="turno-tabs">
+                <div class="turno-tab active" data-turno="matutino">Turno Matutino</div>
+                <div class="turno-tab" data-turno="vespertino">Turno Vespertino</div>
+            </div>
+            
+            <!-- Conteúdo do turno matutino -->
+            <div id="turno-matutino" class="turno-content active">
+                <h3>Turmas do Turno Matutino</h3>
+                <div class="turmas-grid">
+                    <div class="turma-card" id="turma-1A">
+                        <h4>1ª Série A</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 1A serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="turma-card" id="turma-2A">
+                        <h4>2ª Série A</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 2A serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="turma-card" id="turma-3A">
+                        <h4>3ª Série A</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 3A serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Conteúdo do turno vespertino -->
+            <div id="turno-vespertino" class="turno-content">
+                <h3>Turmas do Turno Vespertino</h3>
+                <div class="turmas-grid">
+                    <div class="turma-card" id="turma-1B">
+                        <h4>1ª Série B</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 1B serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="turma-card" id="turma-2B">
+                        <h4>2ª Série B</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 2B serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="turma-card" id="turma-3B">
+                        <h4>3ª Série B</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Contato do Responsável</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Alunos da 3B serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Relatórios -->
+        <section id="relatorios">
+            <h2>Relatórios</h2>
+            <div class="form-group">
+                <label for="filtro-turma">Filtrar por Turma:</label>
+                <select id="filtro-turma">
+                    <option value="">Todas as turmas</option>
+                    <option value="1A">1ª Série A</option>
+                    <option value="1B">1ª Série B</option>
+                    <option value="2A">2ª Série A</option>
+                    <option value="2B">2ª Série B</option>
+                    <option value="3A">3ª Série A</option>
+                    <option value="3B">3ª Série B</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button id="btn-gerar-relatorio">Gerar Relatório</button>
+            </div>
+            
+           <!-- <div id="relatorio-alunos">
+                <h3>Alunos Cadastrados</h3>
+                <table id="tabela-alunos">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Turma</th>
+                            <th>Contato do Responsável</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         Dados dos alunos serão inseridos aqui via JavaScript
+                    </tbody>
+                </table>
+            </div> -->
+            
+            <div id="relatorio-atrasos">
+                <h3>Atrasos Registrados</h3>
+                <table id="tabela-atrasos">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Turma</th>
+                            <th>Data</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados dos atrasos serão inseridos aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="relatorio-celular">
+                <h3>Uso de Celular Registrado</h3>
+                <table id="tabela-celular">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Turma</th>
+                            <th>Aula</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados do uso de celular serão inseridos aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="relatorio-comportamento">
+                <h3>Observações de Comportamento</h3>
+                <table id="tabela-comportamento">
+                    <thead>
+                        <tr>
+                            <th>Aluno</th>
+                            <th>Turma</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados de comportamento serão inseridos aqui via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de Edição de Aluno -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Aluno</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <form id="form-editar-aluno">
+                <input type="hidden" id="editar-id">
+                <div class="form-group">
+                    <label for="editar-nome">Nome do Aluno:</label>
+                    <input type="text" id="editar-nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="editar-turno">Turno:</label>
+                    <select id="editar-turno" required>
+                        <option value="">Selecione o turno</option>
+                        <option value="matutino">Matutino</option>
+                        <option value="vespertino">Vespertino</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editar-turma">Turma:</label>
+                    <select id="editar-turma" required>
+                        <option value="">Primeiro selecione o turno</option>
+                    <select>
+                </div>
+                <div class="form-group">
+                    <label for="editar-contato">Contato do Responsável:</label>
+                    <input type="text" id="editar-contato" 
+                           pattern="[0-9()+-\s]*" 
+                           title="Digite apenas números, parênteses, hífens, espaços ou o símbolo de adição"
+                           maxlength="20"
+                           required>
+                    <span class="input-hint">Apenas números, parênteses, hífens, espaços ou o símbolo de adição são permitidos</span>
+                    <span class="input-error" id="editar-contato-error">Por favor, digite um contato válido (apenas números e caracteres especiais comuns em telefones)</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" id="btn-cancelar-edicao">Cancelar</button>
+                    <button type="submit" class="btn-success">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <p>Sistema de Registro Escolar - SENAC RN &copy; 2023</p>
+        </div>
+    </footer>
+
+    <script>
+        // Armazenamento de dados (simulando um banco de dados)
+        let alunos = JSON.parse(localStorage.getItem('alunos')) || [];
+        let atrasos = JSON.parse(localStorage.getItem('atrasos')) || [];
+        let usoCelular = JSON.parse(localStorage.getItem('usoCelular')) || [];
+        let comportamentos = JSON.parse(localStorage.getItem('comportamentos')) || [];
+
+        // Mapeamento de turnos para turmas
+        const turnoTurmas = {
+            matutino: ['1A', '2A', '3A'],
+            vespertino: ['1B', '2B', '3B']
+        };
+
+        // Elementos DOM
+        const messageEl = document.getElementById('message');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+        
+        // Formulários
+        const formCadastro = document.getElementById('form-cadastro');
+        const formAtrasos = document.getElementById('form-atrasos');
+        const formCelular = document.getElementById('form-celular');
+        const formComportamento = document.getElementById('form-comportamento');
+        
+        // Elementos do formulário de cadastro
+        const turnoSelect = document.getElementById('turno');
+        const turmaSelect = document.getElementById('turma');
+        const contatoInput = document.getElementById('contato-responsavel');
+        const contatoError = document.getElementById('contato-error');
+        
+        // Datalists para autocompletar
+        const alunosAtrasoDatalist = document.getElementById('alunos-atraso');
+        const alunosCelularDatalist = document.getElementById('alunos-celular');
+        const alunosComportamentoDatalist = document.getElementById('alunos-comportamento');
+        
+        // Botão de gerar relatório
+        const btnGerarRelatorio = document.getElementById('btn-gerar-relatorio');
+        const filtroTurma = document.getElementById('filtro-turma');
+        
+        // Abas de turno
+        const turnoTabs = document.querySelectorAll('.turno-tab');
+        const turnoContents = document.querySelectorAll('.turno-content');
+        
+        // Modal de edição
+        const modalEditar = document.getElementById('modal-editar');
+        const formEditarAluno = document.getElementById('form-editar-aluno');
+        const btnCancelarEdicao = document.getElementById('btn-cancelar-edicao');
+        const closeModal = document.querySelector('.close-modal');
+        const editarContatoInput = document.getElementById('editar-contato');
+        const editarContatoError = document.getElementById('editar-contato-error');
+
+        // Função para validar contato
+        function validarContato(contato) {
+            // Permite apenas números, parênteses, hífens, espaços e o símbolo de adição
+            const regex = /^[0-9()+\-\s]+$/;
+            return regex.test(contato);
+        }
+
+        // Função para formatar contato (remover caracteres inválidos)
+        function formatarContato(contato) {
+            // Remove qualquer caractere que não seja número, parênteses, hífen, espaço ou +
+            return contato.replace(/[^0-9()+\-\s]/g, '');
+        }
+
+        // Função para mostrar mensagens
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // Função para navegar entre as seções
+        function navigateToSection(targetId) {
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(targetId).classList.add('active');
+            
+            // Atualizar o link ativo na navegação
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('active');
+            
+            // Se for a seção de alunos ou relatórios, atualizar os dados
+            if (targetId === 'alunos') {
+                updateAlunosCadastrados();
+            } else if (targetId === 'relatorios') {
+                updateRelatorios();
+            }
+        }
+
+        // Função para popular o select de turmas baseado no turno selecionado
+        function updateTurmaOptions() {
+            const turno = turnoSelect.value;
+            turmaSelect.innerHTML = '<option value="">Selecione a turma</option>';
+            
+            if (turno && turnoTurmas[turno]) {
+                turnoTurmas[turno].forEach(turma => {
+                    const option = document.createElement('option');
+                    option.value = turma;
+                    option.textContent = `${turma.charAt(0)}ª Série ${turma.charAt(1)}`;
+                    turmaSelect.appendChild(option);
+                });
+            }
+        }
+
+        // Função para popular o select de turmas no modal de edição
+        function updateTurmaOptionsEdicao() {
+            const turno = document.getElementById('editar-turno').value;
+            const turmaSelectEdicao = document.getElementById('editar-turma');
+            turmaSelectEdicao.innerHTML = '<option value="">Selecione a turma</option>';
+            
+            if (turno && turnoTurmas[turno]) {
+                turnoTurmas[turno].forEach(turma => {
+                    const option = document.createElement('option');
+                    option.value = turma;
+                    option.textContent = `${turma.charAt(0)}ª Série ${turma.charAt(1)}`;
+                    turmaSelectEdicao.appendChild(option);
+                });
+            }
+        }
+
+        // Função para popular os datalists de alunos
+        function populateAlunoDatalists() {
+            // Limpar os datalists
+            alunosAtrasoDatalist.innerHTML = '';
+            alunosCelularDatalist.innerHTML = '';
+            alunosComportamentoDatalist.innerHTML = '';
+            
+            // Adicionar os alunos aos datalists
+            alunos.forEach(aluno => {
+                const option = document.createElement('option');
+                option.value = `${aluno.nome} (${aluno.turma})`;
+                
+                alunosAtrasoDatalist.appendChild(option.cloneNode(true));
+                alunosCelularDatalist.appendChild(option.cloneNode(true));
+                alunosComportamentoDatalist.appendChild(option);
+            });
+        }
+
+        // Função para cadastrar aluno
+        function cadastrarAluno(event) {
+            event.preventDefault();
+            
+            const nome = document.getElementById('nome-aluno').value;
+            const turno = turnoSelect.value;
+            const turma = turmaSelect.value;
+            let contato = document.getElementById('contato-responsavel').value;
+            
+            // Validar contato
+            if (!validarContato(contato)) {
+                contatoError.style.display = 'block';
+                contatoInput.focus();
+                return;
+            } else {
+                contatoError.style.display = 'none';
+            }
+            
+            // Formatar contato (remover caracteres inválidos)
+            contato = formatarContato(contato);
+            
+            // Gerar ID único
+            const id = Date.now().toString();
+            
+            // Adicionar aluno à lista
+            alunos.push({
+                id,
+                nome,
+                turno,
+                turma,
+                contato
+            });
+            
+            // Salvar no localStorage
+            localStorage.setItem('alunos', JSON.stringify(alunos));
+            
+            // Atualizar os datalists de alunos
+            populateAlunoDatalists();
+            
+            // Limpar o formulário
+            formCadastro.reset();
+            
+            // Resetar as opções de turma
+            turmaSelect.innerHTML = '<option value="">Primeiro selecione o turno</option>';
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Aluno cadastrado com sucesso!', 'success');
+        }
+
+        // Função para registrar atraso
+        function registrarAtraso(event) {
+            event.preventDefault();
+            
+            const alunoInput = document.getElementById('aluno-atraso').value;
+            const hora = document.getElementById('hora-atraso').value;
+            const data = document.getElementById('data-atraso').value;
+            
+            // Extrair nome e turma do input
+            const match = alunoInput.match(/(.+)\s+\(([1-3][AB])\)/);
+            
+            if (!match) {
+                showMessage('Por favor, selecione um aluno válido da lista.', 'error');
+                return;
+            }
+            
+            const nomeAluno = match[1];
+            const turmaAluno = match[2];
+            
+            // Encontrar o aluno pelo nome e turma
+            const aluno = alunos.find(a => a.nome === nomeAluno && a.turma === turmaAluno);
+            
+            if (!aluno) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Adicionar atraso à lista
+            atrasos.push({
+                id: Date.now().toString(),
+                alunoId: aluno.id,
+                alunoNome: aluno.nome,
+                alunoTurma: aluno.turma,
+                hora,
+                data
+            });
+            
+            // Salvar no localStorage
+            localStorage.setItem('atrasos', JSON.stringify(atrasos));
+            
+            // Limpar o formulário
+            formAtrasos.reset();
+            
+            // Configurar data atual como padrão
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data-atraso').value = hoje;
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Atraso registrado com sucesso!', 'success');
+        }
+
+        // Função para registrar uso de celular
+        function registrarUsoCelular(event) {
+            event.preventDefault();
+            
+            const alunoInput = document.getElementById('aluno-celular').value;
+            const aula = document.getElementById('aula-celular').value;
+            const observacao = document.getElementById('observacao-celular').value;
+            
+            // Extrair nome e turma do input
+            const match = alunoInput.match(/(.+)\s+\(([1-3][AB])\)/);
+            
+            if (!match) {
+                showMessage('Por favor, selecione um aluno válido da lista.', 'error');
+                return;
+            }
+            
+            const nomeAluno = match[1];
+            const turmaAluno = match[2];
+            
+            // Encontrar o aluno pelo nome e turma
+            const aluno = alunos.find(a => a.nome === nomeAluno && a.turma === turmaAluno);
+            
+            if (!aluno) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Adicionar uso de celular à lista
+            usoCelular.push({
+                id: Date.now().toString(),
+                alunoId: aluno.id,
+                alunoNome: aluno.nome,
+                alunoTurma: aluno.turma,
+                aula,
+                observacao
+            });
+            
+            // Salvar no localStorage
+            localStorage.setItem('usoCelular', JSON.stringify(usoCelular));
+            
+            // Limpar o formulário
+            formCelular.reset();
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Uso de celular registrado com sucesso!', 'success');
+        }
+
+        // Função para registrar comportamento
+        function registrarComportamento(event) {
+            event.preventDefault();
+            
+            const alunoInput = document.getElementById('aluno-comportamento').value;
+            const observacao = document.getElementById('observacao-comportamento').value;
+            
+            // Extrair nome e turma do input
+            const match = alunoInput.match(/(.+)\s+\(([1-3][AB])\)/);
+            
+            if (!match) {
+                showMessage('Por favor, selecione um aluno válido da lista.', 'error');
+                return;
+            }
+            
+            const nomeAluno = match[1];
+            const turmaAluno = match[2];
+            
+            // Encontrar o aluno pelo nome e turma
+            const aluno = alunos.find(a => a.nome === nomeAluno && a.turma === turmaAluno);
+            
+            if (!aluno) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Adicionar comportamento à lista
+            comportamentos.push({
+                id: Date.now().toString(),
+                alunoId: aluno.id,
+                alunoNome: aluno.nome,
+                alunoTurma: aluno.turma,
+                observacao
+            });
+            
+            // Salvar no localStorage
+            localStorage.setItem('comportamentos', JSON.stringify(comportamentos));
+            
+            // Limpar o formulário
+            formComportamento.reset();
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Observação de comportamento registrada com sucesso!', 'success');
+        }
+
+        // Função para abrir o modal de edição
+        function abrirModalEdicao(alunoId) {
+            const aluno = alunos.find(a => a.id === alunoId);
+            
+            if (!aluno) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Preencher o formulário com os dados do aluno
+            document.getElementById('editar-id').value = aluno.id;
+            document.getElementById('editar-nome').value = aluno.nome;
+            document.getElementById('editar-turno').value = aluno.turno;
+            document.getElementById('editar-contato').value = aluno.contato;
+            
+            // Atualizar as opções de turma baseadas no turno
+            updateTurmaOptionsEdicao();
+            
+            // Selecionar a turma correta
+            setTimeout(() => {
+                document.getElementById('editar-turma').value = aluno.turma;
+            }, 100);
+            
+            // Abrir o modal
+            modalEditar.classList.add('active');
+        }
+
+        // Função para editar aluno
+        function editarAluno(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('editar-id').value;
+            const nome = document.getElementById('editar-nome').value;
+            const turno = document.getElementById('editar-turno').value;
+            const turma = document.getElementById('editar-turma').value;
+            let contato = document.getElementById('editar-contato').value;
+            
+            // Validar contato
+            if (!validarContato(contato)) {
+                editarContatoError.style.display = 'block';
+                editarContatoInput.focus();
+                return;
+            } else {
+                editarContatoError.style.display = 'none';
+            }
+            
+            // Formatar contato (remover caracteres inválidos)
+            contato = formatarContato(contato);
+            
+            // Encontrar o índice do aluno
+            const alunoIndex = alunos.findIndex(a => a.id === id);
+            
+            if (alunoIndex === -1) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Atualizar os dados do aluno
+            alunos[alunoIndex] = {
+                id,
+                nome,
+                turno,
+                turma,
+                contato
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('alunos', JSON.stringify(alunos));
+            
+            // Atualizar os datalists de alunos
+            populateAlunoDatalists();
+            
+            // Fechar o modal
+            modalEditar.classList.remove('active');
+            
+            // Atualizar a exibição dos alunos
+            updateAlunosCadastrados();
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Aluno atualizado com sucesso!', 'success');
+        }
+
+        // Função para excluir aluno
+        function excluirAluno(alunoId) {
+            if (!confirm('Tem certeza que deseja excluir este aluno? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+            
+            // Encontrar o índice do aluno
+            const alunoIndex = alunos.findIndex(a => a.id === alunoId);
+            
+            if (alunoIndex === -1) {
+                showMessage('Aluno não encontrado!', 'error');
+                return;
+            }
+            
+            // Remover o aluno
+            alunos.splice(alunoIndex, 1);
+            
+            // Salvar no localStorage
+            localStorage.setItem('alunos', JSON.stringify(alunos));
+            
+            // Atualizar os datalists de alunos
+            populateAlunoDatalists();
+            
+            // Atualizar a exibição dos alunos
+            updateAlunosCadastrados();
+            
+            // Mostrar mensagem de sucesso
+            showMessage('Aluno excluído com sucesso!', 'success');
+        }
+
+        // Função para atualizar a seção de alunos cadastrados
+        function updateAlunosCadastrados() {
+            // Limpar todas as tabelas de turmas
+            document.querySelectorAll('.turma-card tbody').forEach(tbody => {
+                tbody.innerHTML = '';
+            });
+            
+            // Agrupar alunos por turma
+            const alunosPorTurma = {};
+            alunos.forEach(aluno => {
+                if (!alunosPorTurma[aluno.turma]) {
+                    alunosPorTurma[aluno.turma] = [];
+                }
+                alunosPorTurma[aluno.turma].push(aluno);
+            });
+            
+            // Preencher as tabelas de cada turma
+            Object.keys(alunosPorTurma).forEach(turma => {
+                const tbody = document.querySelector(`#turma-${turma} tbody`);
+                if (tbody) {
+                    alunosPorTurma[turma].forEach(aluno => {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).textContent = aluno.nome;
+                        row.insertCell(1).textContent = aluno.contato;
+                        
+                        // Adicionar coluna de ações
+                        const cellAcoes = row.insertCell(2);
+                        cellAcoes.className = 'action-buttons';
+                        
+                        const btnEditar = document.createElement('button');
+                        btnEditar.textContent = 'Editar';
+                        btnEditar.className = 'btn-secondary btn-small';
+                        btnEditar.addEventListener('click', () => abrirModalEdicao(aluno.id));
+                        
+                        const btnExcluir = document.createElement('button');
+                        btnExcluir.textContent = 'Excluir';
+                        btnExcluir.className = 'btn-danger btn-small';
+                        btnExcluir.addEventListener('click', () => excluirAluno(aluno.id));
+                        
+                        cellAcoes.appendChild(btnEditar);
+                        cellAcoes.appendChild(btnExcluir);
+                    });
+                }
+            });
+        }
+
+        // Função para atualizar os relatórios
+        function updateRelatorios() {
+            const turmaFiltro = filtroTurma.value;
+            
+            // Filtrar dados se houver filtro
+            const alunosFiltrados = turmaFiltro ? 
+                alunos.filter(aluno => aluno.turma === turmaFiltro) : alunos;
+            
+            const atrasosFiltrados = turmaFiltro ? 
+                atrasos.filter(atraso => atraso.alunoTurma === turmaFiltro) : atrasos;
+            
+            const celularFiltrados = turmaFiltro ? 
+                usoCelular.filter(celular => celular.alunoTurma === turmaFiltro) : usoCelular;
+            
+            const comportamentoFiltrados = turmaFiltro ? 
+                comportamentos.filter(comportamento => comportamento.alunoTurma === turmaFiltro) : comportamentos;
+            
+            // Atualizar tabela de alunos
+            const tabelaAlunos = document.getElementById('tabela-alunos').getElementsByTagName('tbody')[0];
+            tabelaAlunos.innerHTML = '';
+            
+            alunosFiltrados.forEach(aluno => {
+                const row = tabelaAlunos.insertRow();
+                row.insertCell(0).textContent = aluno.nome;
+                row.insertCell(1).textContent = aluno.turma;
+                row.insertCell(2).textContent = aluno.contato;
+            });
+            
+            // Atualizar tabela de atrasos
+            const tabelaAtrasos = document.getElementById('tabela-atrasos').getElementsByTagName('tbody')[0];
+            tabelaAtrasos.innerHTML = '';
+            
+            atrasosFiltrados.forEach(atraso => {
+                const row = tabelaAtrasos.insertRow();
+                row.insertCell(0).textContent = atraso.alunoNome;
+                row.insertCell(1).textContent = atraso.alunoTurma;
+                row.insertCell(2).textContent = atraso.data;
+                row.insertCell(3).textContent = atraso.hora;
+            });
+            
+            // Atualizar tabela de uso de celular
+            const tabelaCelular = document.getElementById('tabela-celular').getElementsByTagName('tbody')[0];
+            tabelaCelular.innerHTML = '';
+            
+            celularFiltrados.forEach(celular => {
+                const row = tabelaCelular.insertRow();
+                row.insertCell(0).textContent = celular.alunoNome;
+                row.insertCell(1).textContent = celular.alunoTurma;
+                row.insertCell(2).textContent = celular.aula;
+                row.insertCell(3).textContent = celular.observacao;
+            });
+            
+            // Atualizar tabela de comportamento
+            const tabelaComportamento = document.getElementById('tabela-comportamento').getElementsByTagName('tbody')[0];
+            tabelaComportamento.innerHTML = '';
+            
+            comportamentoFiltrados.forEach(comportamento => {
+                const row = tabelaComportamento.insertRow();
+                row.insertCell(0).textContent = comportamento.alunoNome;
+                row.insertCell(1).textContent = comportamento.alunoTurma;
+                row.insertCell(2).textContent = comportamento.observacao;
+            });
+        }
+
+        // Função para alternar entre abas de turno
+        function switchTurnoTab(turno) {
+            // Atualizar abas
+            turnoTabs.forEach(tab => {
+                if (tab.getAttribute('data-turno') === turno) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Atualizar conteúdos
+            turnoContents.forEach(content => {
+                if (content.id === `turno-${turno}`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Popular os datalists de alunos
+            populateAlunoDatalists();
+            
+            // Configurar navegação
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    navigateToSection(target);
+                });
+            });
+            
+            // Configurar formulários
+            formCadastro.addEventListener('submit', cadastrarAluno);
+            formAtrasos.addEventListener('submit', registrarAtraso);
+            formCelular.addEventListener('submit', registrarUsoCelular);
+            formComportamento.addEventListener('submit', registrarComportamento);
+            formEditarAluno.addEventListener('submit', editarAluno);
+            
+            // Configurar validação de contato em tempo real
+            contatoInput.addEventListener('input', function() {
+                if (!validarContato(this.value)) {
+                    contatoError.style.display = 'block';
+                } else {
+                    contatoError.style.display = 'none';
+                }
+            });
+            
+            editarContatoInput.addEventListener('input', function() {
+                if (!validarContato(this.value)) {
+                    editarContatoError.style.display = 'block';
+                } else {
+                    editarContatoError.style.display = 'none';
+                }
+            });
+            
+            // Configurar select de turno
+            turnoSelect.addEventListener('change', updateTurmaOptions);
+            document.getElementById('editar-turno').addEventListener('change', updateTurmaOptionsEdicao);
+            
+            // Configurar botão de gerar relatório
+            btnGerarRelatorio.addEventListener('click', updateRelatorios);
+            
+            // Configurar abas de turno
+            turnoTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const turno = this.getAttribute('data-turno');
+                    switchTurnoTab(turno);
+                });
+            });
+            
+            // Configurar modal de edição
+            btnCancelarEdicao.addEventListener('click', () => {
+                modalEditar.classList.remove('active');
+            });
+            
+            closeModal.addEventListener('click', () => {
+                modalEditar.classList.remove('active');
+            });
+            
+            // Fechar modal ao clicar fora dele
+            modalEditar.addEventListener('click', (e) => {
+                if (e.target === modalEditar) {
+                    modalEditar.classList.remove('active');
+                }
+            });
+            
+            // Configurar data atual como padrão para o campo de data de atraso
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('data-atraso').value = hoje;
+            
+            // Inicializar a seção de alunos cadastrados se necessário
+            if (alunos.length > 0) {
+                updateAlunosCadastrados();
+            }
+        });
+    </script>
+</body>
+</html>
